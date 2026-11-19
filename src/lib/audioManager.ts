@@ -80,7 +80,20 @@ class AudioManager {
 
     if (this.isPlaying) return true;
 
-    // Try playing local file /audio/background-theme.mp3 first
+    // If audio element already exists, resume it directly
+    if (this.audioElement) {
+      try {
+        await this.audioElement.play();
+        this.isPlaying = true;
+        this.activeSource = "file";
+        this.notify();
+        return true;
+      } catch {
+        // Fall through to re-initialize
+      }
+    }
+
+    // Try playing local file (/audio/hpaudio.mp3)
     try {
       const canPlayFile = await this.tryPlayAudioFile();
       if (canPlayFile) {
@@ -124,34 +137,49 @@ class AudioManager {
       audio.loop = true;
       audio.volume = this.isMuted ? 0 : this.volume;
 
-      const onCanPlay = () => {
-        audio
-          .play()
-          .then(() => {
-            this.audioElement = audio;
-            resolve(true);
-          })
-          .catch(() => {
-            resolve(false);
-          });
+      let hasResolved = false;
+
+      const finishSuccess = () => {
+        if (hasResolved) return;
+        hasResolved = true;
+        this.audioElement = audio;
+        resolve(true);
       };
 
-      const onError = () => {
+      const finishFail = () => {
+        if (hasResolved) return;
+        hasResolved = true;
         resolve(false);
       };
 
-      audio.addEventListener("canplaythrough", onCanPlay, { once: true });
-      audio.addEventListener("error", onError, { once: true });
-      audio.load();
+      // Attempt immediate play (works inside user-triggered gestures like clicking Enter)
+      audio
+        .play()
+        .then(() => {
+          finishSuccess();
+        })
+        .catch(() => {
+          // If browser requires media to buffer first, wait for canplay
+          audio.addEventListener("canplay", () => {
+            audio
+              .play()
+              .then(finishSuccess)
+              .catch(finishFail);
+          }, { once: true });
+        });
 
-      // Timeout check after 1.5s
+      audio.addEventListener("error", finishFail, { once: true });
+
+      // Safety timeout after 2.5s
       setTimeout(() => {
-        if (!this.audioElement) {
-          audio.removeEventListener("canplaythrough", onCanPlay);
-          audio.removeEventListener("error", onError);
-          resolve(false);
+        if (!hasResolved) {
+          if (this.audioElement) {
+            finishSuccess();
+          } else {
+            finishFail();
+          }
         }
-      }, 1500);
+      }, 2500);
     });
   }
 
@@ -507,4 +535,8 @@ class AudioManager {
 }
 
 export const audioManager = new AudioManager();
+
+if (typeof window !== "undefined") {
+  (window as unknown as { audioManager: AudioManager }).audioManager = audioManager;
+}
 

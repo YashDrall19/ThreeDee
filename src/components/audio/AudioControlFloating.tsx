@@ -45,8 +45,8 @@ export function AudioControlFloating() {
               <Music className="w-3.5 h-3.5" />
               <span>Orchestral Theme</span>
             </span>
-            <span className="text-[10px] font-mono text-hogwarts-ivory uppercase font-bold">
-              {source === "file" ? "MP3 File" : "Celestial Synth"}
+            <span className="text-[10px] font-mono text-hogwarts-gold uppercase font-bold">
+              {source === "file" ? "Harry Potter Theme (MP3)" : "Celestial Synth"}
             </span>
           </div>
 
@@ -69,8 +69,8 @@ export function AudioControlFloating() {
             />
           </div>
 
-          <p className="text-[9px] text-hogwarts-parchment/50 font-serif leading-tight">
-            Place legal MP3 at <code className="text-hogwarts-gold">/public/audio/background-theme.mp3</code> or enjoy live procedural celestial chimes.
+          <p className="text-[9px] text-hogwarts-parchment/70 font-serif leading-tight">
+            Playing <span className="text-hogwarts-gold font-semibold">hpaudio.mp3</span> background soundtrack with ambient spatial reverberation.
           </p>
         </div>
       )}
