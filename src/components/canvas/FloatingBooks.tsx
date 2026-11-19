@@ -175,3 +175,4 @@ export function FloatingBooks() {
     </group>
   );
 }
+

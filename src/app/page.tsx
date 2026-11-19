@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import { motion, AnimatePresence } from "framer-motion";
 import { HogwartsIntro } from "@/components/intro/HogwartsIntro";
 import { MaraudersNavbar } from "@/components/navigation/MaraudersNavbar";
 import { WandCursor } from "@/components/cursor/WandCursor";
@@ -95,10 +96,12 @@ export default function Home() {
 
   return (
     <main className="relative min-h-screen bg-hogwarts-dark text-hogwarts-parchment overflow-x-hidden wand-cursor">
-      {/* Intro Overlay */}
-      {introActive && (
-        <HogwartsIntro onEnter={() => setIntroActive(false)} />
-      )}
+      {/* Intro Overlay with Smooth Gate Exit Transition */}
+      <AnimatePresence mode="wait">
+        {introActive && (
+          <HogwartsIntro key="hogwarts-intro" onEnter={() => setIntroActive(false)} />
+        )}
+      </AnimatePresence>
 
       {/* Cinematic Environmental Image Backdrop */}
       <CinematicBackdrop activeChapter={activeChapter} />
@@ -109,8 +112,9 @@ export default function Home() {
       {/* Wand Cursor & Lumos Torch Lighting */}
       <WandCursor spellMode={spellMode} footprintsActive={footprintsActive} />
 
-      {/* Marauder's Map Navbar */}
+      {/* Marauder's Map Navbar with Synchronized Entrance */}
       <MaraudersNavbar
+        isRevealed={!introActive}
         activeChapter={activeChapter}
         onNavigate={handleNavigate}
         onCastSpell={handleCastSpell}
@@ -119,11 +123,25 @@ export default function Home() {
       />
 
       {/* Floating Sound Design Controller */}
-      <AudioControlFloating />
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={!introActive ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+        transition={{ duration: 0.8, delay: 0.35, ease: "easeOut" }}
+      >
+        <AudioControlFloating />
+      </motion.div>
 
-      {/* Continuous 8 Chapter Chronicles */}
-      <div className="relative z-10 flex flex-col gap-12 sm:gap-20">
-        <Chapter1PhilosophersStone onExplore={() => handleNavigate(2)} />
+      {/* Continuous 8 Chapter Chronicles with Coordinated Entrance */}
+      <motion.div
+        initial={{ opacity: 0, y: 35, filter: "blur(12px)" }}
+        animate={!introActive ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
+        transition={{ duration: 1.15, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+        className="relative z-10 flex flex-col gap-12 sm:gap-20"
+      >
+        <Chapter1PhilosophersStone
+          isRevealed={!introActive}
+          onExplore={() => handleNavigate(2)}
+        />
         <Chapter2ChamberOfSecrets />
         <Chapter3PrisonerOfAzkaban />
         <Chapter4GobletOfFire />
@@ -131,7 +149,7 @@ export default function Home() {
         <Chapter6HalfBloodPrince />
         <Chapter7DeathlyHallowsPart1 />
         <Chapter8DeathlyHallowsPart2 />
-      </div>
+      </motion.div>
     </main>
   );
 }

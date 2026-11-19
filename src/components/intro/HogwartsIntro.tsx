@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Sparkles, Wand2, Compass } from "lucide-react";
 import { audioManager } from "@/lib/audioManager";
-import confetti from "canvas-confetti";
 
 interface HogwartsIntroProps {
   onEnter: () => void;
@@ -12,7 +11,6 @@ interface HogwartsIntroProps {
 
 export function HogwartsIntro({ onEnter }: HogwartsIntroProps) {
   const [step, setStep] = useState<number>(0);
-  const [isEntering, setIsEntering] = useState(false);
 
   useEffect(() => {
     const timer1 = setTimeout(() => setStep(1), 500);  // Spark appears
@@ -29,23 +27,9 @@ export function HogwartsIntro({ onEnter }: HogwartsIntroProps) {
   }, []);
 
   const handleEnter = () => {
-    if (isEntering) return;
-    setIsEntering(true);
     audioManager.playSfx("portal");
     audioManager.startAudio();
-
-    // Burst golden magical sparks across screen
-    confetti({
-      particleCount: 85,
-      spread: 100,
-      origin: { y: 0.6 },
-      colors: ["#D6B56D", "#F4EBDD", "#F0DFB6", "#A47D45"],
-      disableForReducedMotion: true,
-    });
-
-    setTimeout(() => {
-      onEnter();
-    }, 1100);
+    onEnter();
   };
 
   const handleSkip = () => {
@@ -54,13 +38,16 @@ export function HogwartsIntro({ onEnter }: HogwartsIntroProps) {
   };
 
   return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 1 }}
-        exit={{ opacity: 0, scale: 1.05, filter: "blur(10px)" }}
-        transition={{ duration: 1.1, ease: "easeInOut" }}
-        className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-hogwarts-charcoal text-hogwarts-ivory overflow-hidden px-4"
-      >
+    <motion.div
+      initial={{ opacity: 1 }}
+      exit={{
+        opacity: 0,
+        scale: 1.12,
+        filter: "brightness(1.25) blur(14px)",
+      }}
+      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-hogwarts-charcoal text-hogwarts-ivory overflow-hidden px-4"
+    >
         {/* Cinematic Atmospheric Castle Background Layer */}
         <div
           className="absolute inset-0 bg-cover bg-center filter brightness-[0.55] contrast-[1.1] scale-105 pointer-events-none transition-transform duration-1000"
@@ -142,7 +129,6 @@ export function HogwartsIntro({ onEnter }: HogwartsIntroProps) {
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}
             onClick={handleEnter}
-            disabled={isEntering}
             className="group relative flex items-center gap-3 px-8 py-4 sm:px-10 sm:py-4 rounded-full border-2 border-hogwarts-gold bg-gradient-to-r from-hogwarts-navy via-hogwarts-charcoal to-hogwarts-navy text-hogwarts-gold font-serif text-sm sm:text-base tracking-[0.2em] uppercase font-bold shadow-magical hover:shadow-magical-lg transition-all duration-300"
           >
             <Wand2 className="w-4 h-4 text-hogwarts-gold transition-transform group-hover:rotate-45" />
@@ -166,6 +152,5 @@ export function HogwartsIntro({ onEnter }: HogwartsIntroProps) {
           <span>ᚱ</span>
         </div>
       </motion.div>
-    </AnimatePresence>
   );
 }

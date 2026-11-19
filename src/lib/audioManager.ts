@@ -102,16 +102,25 @@ class AudioManager {
   }
 
   private async tryPlayAudioFile(): Promise<boolean> {
-    try {
-      // Check if file exists without triggering browser media 404 console error
-      const response = await fetch("/audio/background-theme.mp3", { method: "HEAD" });
-      if (!response.ok) return false;
-    } catch {
-      return false;
+    const candidatePaths = ["/audio/hpaudio.mp3", "/audio/background-theme.mp3"];
+    let validPath: string | null = null;
+
+    for (const path of candidatePaths) {
+      try {
+        const response = await fetch(path, { method: "HEAD" });
+        if (response.ok) {
+          validPath = path;
+          break;
+        }
+      } catch {
+        // try next candidate
+      }
     }
 
+    if (!validPath) return false;
+
     return new Promise((resolve) => {
-      const audio = new Audio("/audio/background-theme.mp3");
+      const audio = new Audio(validPath as string);
       audio.loop = true;
       audio.volume = this.isMuted ? 0 : this.volume;
 

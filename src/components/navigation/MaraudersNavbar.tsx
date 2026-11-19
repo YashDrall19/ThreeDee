@@ -15,6 +15,7 @@ import { audioManager } from "@/lib/audioManager";
 import confetti from "canvas-confetti";
 
 interface MaraudersNavbarProps {
+  isRevealed?: boolean;
   activeChapter: number;
   onNavigate: (chapterNumber: number) => void;
   onCastSpell: (spell: string) => void;
@@ -23,6 +24,7 @@ interface MaraudersNavbarProps {
 }
 
 export function MaraudersNavbar({
+  isRevealed = true,
   activeChapter,
   onNavigate,
   onCastSpell,
@@ -105,7 +107,10 @@ export function MaraudersNavbar({
       </div>
 
       {/* Floating Hogwarts Header Navigation */}
-      <header
+      <motion.header
+        initial={{ y: -70, opacity: 0 }}
+        animate={isRevealed ? { y: 0, opacity: 1 } : { y: -70, opacity: 0 }}
+        transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
         className={`fixed top-3 left-0 w-full z-40 px-3 sm:px-6 transition-all duration-300 ${
           isScrolled ? "py-1" : "py-2"
         }`}
@@ -219,7 +224,7 @@ export function MaraudersNavbar({
             </button>
           </div>
         </div>
-      </header>
+      </motion.header>
 
       {/* Mobile Drawer Menu */}
       <AnimatePresence>

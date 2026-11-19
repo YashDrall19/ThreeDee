@@ -58,6 +58,8 @@ async function runQA() {
 
   // Click 'Enter the Wizarding World'
   console.log("3. Clicking 'Enter the Wizarding World' gate button...");
+  const confettiCanvasCountBefore = await page.$$eval("canvas", (canvases) => canvases.length);
+
   await page.evaluate(() => {
     const btns = Array.from(document.querySelectorAll("button"));
     const enterBtn = btns.find((b) => b.innerText.includes("Enter the Wizarding World") || b.innerText.includes("ENTER"));
@@ -68,8 +70,18 @@ async function runQA() {
     }
   });
 
+  // Verify no confetti canvas was added
+  await sleep(400);
+  const confettiCanvasCountAfter = await page.$$eval("canvas", (canvases) => canvases.length);
+  console.log(`Canvas count before: ${confettiCanvasCountBefore}, after click: ${confettiCanvasCountAfter}`);
+  if (confettiCanvasCountAfter > confettiCanvasCountBefore) {
+    console.warn("WARNING: Extra canvas created after clicking Enter (possibly confetti)!");
+  } else {
+    console.log("CONFIRMED: No confetti burst canvas spawned on Enter click.");
+  }
+
   // Wait for transition into chapter 1
-  await sleep(2000);
+  await sleep(1500);
   await page.screenshot({ path: path.join(screenshotsDir, "02-chapter1-awakening.png") });
   console.log("Saved: 02-chapter1-awakening.png");
 
@@ -81,7 +93,7 @@ async function runQA() {
   console.log("4. Scrolling to Chapter 2 (Chamber of Secrets)...");
   await page.evaluate(() => {
     const el = document.getElementById("chamber-of-secrets");
-    if (el) el.scrollIntoView();
+    if (el) el.scrollIntoView({ behavior: "smooth" });
   });
   await sleep(1200);
   await page.screenshot({ path: path.join(screenshotsDir, "03-chapter2-chamber.png") });
@@ -91,11 +103,26 @@ async function runQA() {
   console.log("5. Scrolling to Chapter 3 (Prisoner of Azkaban)...");
   await page.evaluate(() => {
     const el = document.getElementById("prisoner-of-azkaban");
-    if (el) el.scrollIntoView();
+    if (el) el.scrollIntoView({ behavior: "smooth" });
   });
-  await sleep(1200);
+  await sleep(1500);
   await page.screenshot({ path: path.join(screenshotsDir, "04-chapter3-azkaban.png") });
   console.log("Saved: 04-chapter3-azkaban.png");
+
+  // In Chapter 3: Test tab switching and verify skill boxes animation
+  console.log("5b. Testing Chapter 3 Tab Switch and Multi-Directional Skill Boxes...");
+  const tabSwitched = await page.evaluate(() => {
+    const catButtons = Array.from(document.querySelectorAll("#prisoner-of-azkaban button"));
+    if (catButtons.length > 2) {
+      catButtons[2].click(); // click 3rd category tab
+      return catButtons[2].innerText;
+    }
+    return null;
+  });
+  console.log("Switched to Tab:", tabSwitched);
+  await sleep(1200);
+  await page.screenshot({ path: path.join(screenshotsDir, "04b-chapter3-tab-switch.png") });
+  console.log("Saved: 04b-chapter3-tab-switch.png");
 
   // Scroll to Chapter 4: Goblet of Fire
   console.log("6. Scrolling to Chapter 4 (Goblet of Fire)...");
