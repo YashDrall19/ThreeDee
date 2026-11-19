@@ -15,47 +15,47 @@ export function GoldenSnitch({ interactive = true }: GoldenSnitchProps) {
   const rightWingRef = useRef<THREE.Group>(null);
   const trailRef = useRef<THREE.Points>(null);
 
-  // High metalness gold material for the core sphere
+  // Realistic PBR Gold Material (high metalness, authentic antique golden sheen)
   const goldMaterial = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: "#FFE066",
-        emissive: "#855A00",
-        emissiveIntensity: 0.35,
-        metalness: 0.95,
-        roughness: 0.15,
+        color: "#E2BA55",
+        emissive: "#543C00",
+        emissiveIntensity: 0.15,
+        metalness: 0.94,
+        roughness: 0.22,
       }),
     []
   );
 
-  // Translucent delicate silver/gold wing material
+  // Translucent delicate filigree silver-gold wing material
   const wingMaterial = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: "#FFF5D1",
-        emissive: "#C6A15B",
-        emissiveIntensity: 0.25,
-        metalness: 0.8,
-        roughness: 0.2,
+        color: "#F4EBDD",
+        emissive: "#D6B56D",
+        emissiveIntensity: 0.18,
+        metalness: 0.82,
+        roughness: 0.28,
         transparent: true,
-        opacity: 0.85,
+        opacity: 0.78,
         side: THREE.DoubleSide,
       }),
     []
   );
 
-  // Wing geometry: streamlined feathered shape
+  // Realistic tapered dragonfly/hummingbird wing geometry
   const wingGeometry = useMemo(() => {
     const shape = new THREE.Shape();
     shape.moveTo(0, 0);
-    shape.bezierCurveTo(0.2, 0.4, 0.4, 1.2, 0.2, 2.2);
-    shape.bezierCurveTo(0.0, 2.6, -0.4, 1.8, -0.3, 0.8);
-    shape.bezierCurveTo(-0.2, 0.3, -0.1, 0.1, 0, 0);
-    return new THREE.ShapeGeometry(shape, 12);
+    shape.bezierCurveTo(0.18, 0.5, 0.35, 1.3, 0.18, 2.3);
+    shape.bezierCurveTo(0.0, 2.7, -0.35, 1.9, -0.25, 0.9);
+    shape.bezierCurveTo(-0.18, 0.4, -0.08, 0.1, 0, 0);
+    return new THREE.ShapeGeometry(shape, 14);
   }, []);
 
   // Trail particle geometry
-  const particleCount = 28;
+  const particleCount = 24;
   const trailPositions = useMemo(() => new Float32Array(particleCount * 3), [particleCount]);
 
   const targetPos = useRef(new THREE.Vector3(2.5, 1.2, 0));
@@ -64,48 +64,46 @@ export function GoldenSnitch({ interactive = true }: GoldenSnitchProps) {
   const handleClick = (e: { stopPropagation: () => void }) => {
     e.stopPropagation();
     audioManager.playSfx("snitch");
-    // Dash away on click!
+    // Dart away naturally on click
     targetPos.current.x = (Math.random() - 0.5) * 8;
     targetPos.current.y = (Math.random() - 0.5) * 5 + 1;
-    targetPos.current.z = (Math.random() - 0.5) * 4;
+    targetPos.current.z = (Math.random() - 0.5) * 3.5;
   };
 
   useFrame((state, delta) => {
     const time = state.clock.elapsedTime;
 
-    // Wing flapping animation (fast high-frequency flutter)
-    const flapAngle = Math.sin(time * 38) * 0.75;
+    // Realistic high-frequency wing flutter with gentle harmonics
+    const flapAngle = Math.sin(time * 38) * 0.72 + Math.cos(time * 19) * 0.1;
     if (leftWingRef.current) {
       leftWingRef.current.rotation.z = -0.3 + flapAngle;
-      leftWingRef.current.rotation.y = Math.cos(time * 38) * 0.2;
+      leftWingRef.current.rotation.y = Math.cos(time * 38) * 0.18;
     }
     if (rightWingRef.current) {
       rightWingRef.current.rotation.z = 0.3 - flapAngle;
-      rightWingRef.current.rotation.y = -Math.cos(time * 38) * 0.2;
+      rightWingRef.current.rotation.y = -Math.cos(time * 38) * 0.18;
     }
 
-    // Natural snitch flight path (lissajous curve + mouse attraction)
     if (interactive) {
-      const mouseX = (state.pointer.x * 6);
-      const mouseY = (state.pointer.y * 3.5);
+      const mouseX = state.pointer.x * 5.5;
+      const mouseY = state.pointer.y * 3.0;
 
-      const flightX = Math.sin(time * 1.2) * 3.5 + Math.cos(time * 0.7) * 1.5;
-      const flightY = Math.cos(time * 1.5) * 1.8 + 1.2;
-      const flightZ = Math.sin(time * 0.9) * 2.0;
+      // Realistic autonomous orbital flight path + mouse influence
+      const flightX = Math.sin(time * 1.1) * 3.2 + Math.cos(time * 0.6) * 1.4;
+      const flightY = Math.cos(time * 1.4) * 1.6 + 1.2;
+      const flightZ = Math.sin(time * 0.8) * 1.8;
 
-      // Soft lerp toward blend of autonomous flight and pointer influence
-      targetPos.current.x = flightX + mouseX * 0.35;
-      targetPos.current.y = flightY + mouseY * 0.35;
+      targetPos.current.x = flightX + mouseX * 0.3;
+      targetPos.current.y = flightY + mouseY * 0.3;
       targetPos.current.z = flightZ;
 
-      currentPos.current.lerp(targetPos.current, delta * 3.5);
+      currentPos.current.lerp(targetPos.current, delta * 3.2);
 
       if (snitchGroupRef.current) {
         snitchGroupRef.current.position.copy(currentPos.current);
-        // Bank into turns
         const deltaX = targetPos.current.x - currentPos.current.x;
-        snitchGroupRef.current.rotation.z = -deltaX * 0.4;
-        snitchGroupRef.current.rotation.y = time * 0.8;
+        snitchGroupRef.current.rotation.z = -deltaX * 0.35;
+        snitchGroupRef.current.rotation.y = time * 0.7;
       }
     }
 
@@ -114,13 +112,11 @@ export function GoldenSnitch({ interactive = true }: GoldenSnitchProps) {
       const posAttr = trailRef.current.geometry.attributes.position as THREE.BufferAttribute;
       const posArray = posAttr.array as Float32Array;
 
-      // Shift older positions backward
       for (let i = particleCount - 1; i > 0; i--) {
         posArray[i * 3] = posArray[(i - 1) * 3];
         posArray[i * 3 + 1] = posArray[(i - 1) * 3 + 1];
         posArray[i * 3 + 2] = posArray[(i - 1) * 3 + 2];
       }
-      // Set lead point to snitch position
       posArray[0] = snitchGroupRef.current.position.x;
       posArray[1] = snitchGroupRef.current.position.y;
       posArray[2] = snitchGroupRef.current.position.z;
@@ -143,44 +139,42 @@ export function GoldenSnitch({ interactive = true }: GoldenSnitchProps) {
       >
         {/* Core Golden Sphere */}
         <mesh material={goldMaterial}>
-          <sphereGeometry args={[0.32, 32, 32]} />
+          <sphereGeometry args={[0.3, 32, 32]} />
         </mesh>
 
-        {/* Engraved equatorial ring band */}
+        {/* Engraved equatorial ring bands */}
         <mesh material={goldMaterial} rotation={[Math.PI / 4, 0, 0]}>
-          <torusGeometry args={[0.33, 0.02, 16, 32]} />
+          <torusGeometry args={[0.31, 0.016, 16, 32]} />
         </mesh>
         <mesh material={goldMaterial} rotation={[-Math.PI / 4, 0, 0]}>
-          <torusGeometry args={[0.33, 0.02, 16, 32]} />
+          <torusGeometry args={[0.31, 0.016, 16, 32]} />
         </mesh>
 
         {/* Left Wing Group */}
-        <group ref={leftWingRef} position={[-0.26, 0.15, 0]} rotation={[0, -0.3, -0.4]}>
-          <mesh geometry={wingGeometry} material={wingMaterial} scale={[0.55, 0.7, 0.55]} />
-          {/* Wing quill / strut */}
-          <mesh material={goldMaterial} position={[0, 0.8, 0]}>
-            <cylinderGeometry args={[0.012, 0.02, 1.6, 6]} />
+        <group ref={leftWingRef} position={[-0.24, 0.12, 0]} rotation={[0, -0.3, -0.4]}>
+          <mesh geometry={wingGeometry} material={wingMaterial} scale={[0.5, 0.65, 0.5]} />
+          <mesh material={goldMaterial} position={[0, 0.75, 0]}>
+            <cylinderGeometry args={[0.01, 0.018, 1.5, 6]} />
           </mesh>
         </group>
 
         {/* Right Wing Group */}
-        <group ref={rightWingRef} position={[0.26, 0.15, 0]} rotation={[0, 0.3, 0.4]}>
+        <group ref={rightWingRef} position={[0.24, 0.12, 0]} rotation={[0, 0.3, 0.4]}>
           <mesh
             geometry={wingGeometry}
             material={wingMaterial}
-            scale={[-0.55, 0.7, 0.55]}
+            scale={[-0.5, 0.65, 0.5]}
           />
-          {/* Wing quill / strut */}
-          <mesh material={goldMaterial} position={[0, 0.8, 0]}>
-            <cylinderGeometry args={[0.012, 0.02, 1.6, 6]} />
+          <mesh material={goldMaterial} position={[0, 0.75, 0]}>
+            <cylinderGeometry args={[0.01, 0.018, 1.5, 6]} />
           </mesh>
         </group>
 
-        {/* Point light emitted by the Snitch */}
-        <pointLight color="#FFE58F" intensity={2.5} distance={5} decay={2} />
+        {/* Subtle, realistic golden point light */}
+        <pointLight color="#FCD34D" intensity={1.8} distance={4} decay={2} />
       </group>
 
-      {/* Sparkling particle trail behind the snitch */}
+      {/* Sparkling particle trail */}
       <points ref={trailRef}>
         <bufferGeometry>
           <bufferAttribute
@@ -191,11 +185,12 @@ export function GoldenSnitch({ interactive = true }: GoldenSnitchProps) {
           />
         </bufferGeometry>
         <pointsMaterial
-          size={0.12}
-          color="#FFE066"
+          size={0.14}
+          color="#FBBF24"
           transparent
-          opacity={0.7}
+          opacity={0.65}
           blending={THREE.AdditiveBlending}
+          depthWrite={false}
         />
       </points>
     </>

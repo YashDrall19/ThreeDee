@@ -4,6 +4,7 @@ import React, { Suspense, useMemo } from "react";
 import { Canvas } from "@react-three/fiber";
 import { HogwartsCastle } from "./HogwartsCastle";
 import { FloatingCandles } from "./FloatingCandles";
+import { FloatingBooks } from "./FloatingBooks";
 import { GoldenSnitch } from "./GoldenSnitch";
 import { MagicalParticles } from "./MagicalParticles";
 import { CameraController } from "./CameraController";
@@ -13,30 +14,30 @@ interface HogwartsCanvasProps {
 }
 
 export function HogwartsCanvas({ activeChapter }: HogwartsCanvasProps) {
-  // Atmospheric fog color based on active chapter
+  // Atmospheric volumetric fog matching darker cinematic fantasy movies
   const fogColor = useMemo(() => {
     switch (activeChapter) {
       case 2:
-        return "#091512"; // Chamber deep emerald dark
+        return "#0B1510"; // Chamber deep emerald-charcoal
       case 3:
-        return "#0A1224"; // Azkaban navy
+        return "#0E1524"; // Azkaban midnight navy
       case 4:
-        return "#170E0A"; // Goblet deep charcoal amber
+        return "#19120C"; // Goblet deep amber charcoal
       case 5:
-        return "#1A0A0E"; // Order crimson shadow
+        return "#1A0C10"; // Phoenix dark burgundy shadow
       case 6:
-        return "#100F24"; // Pensieve celestial indigo
+        return "#121122"; // Pensieve deep astronomical indigo
       case 7:
-        return "#0F0B18"; // Deathly hallows mist
+        return "#130E1C"; // Deathly Hallows mist
       case 8:
-        return "#120F0C"; // Dawn glow
+        return "#14110E"; // Dawn storm atmosphere
       default:
-        return "#08090D"; // Classic Hogwarts midnight
+        return "#101116"; // Classic cinematic deep charcoal
     }
   }, [activeChapter]);
 
   return (
-    <div className="fixed inset-0 w-full h-full pointer-events-none z-0 overflow-hidden">
+    <div className="fixed inset-0 w-full h-full pointer-events-none z-1 overflow-hidden">
       <Canvas
         camera={{ position: [0, 1.2, 7.5], fov: 52 }}
         dpr={[1, 1.8]}
@@ -48,29 +49,30 @@ export function HogwartsCanvas({ activeChapter }: HogwartsCanvasProps) {
         className="pointer-events-auto"
       >
         <Suspense fallback={null}>
-          {/* Volumetric Fog */}
-          <fog attach="fog" args={[fogColor, 12, 38]} />
+          {/* Volumetric Atmospheric Fog */}
+          <fog attach="fog" args={[fogColor, 10, 36]} />
 
-          {/* Ambient Starlight & Moonlight */}
-          <ambientLight intensity={0.4} color="#C4D7ED" />
+          {/* Natural Ambient Starlight & Castle Illumination */}
+          <ambientLight intensity={0.5} color="#D1D9E6" />
 
           {/* Moonlight Directional Key Light */}
           <directionalLight
-            position={[10, 15, 8]}
-            intensity={0.9}
-            color="#E2EEFA"
+            position={[12, 16, 9]}
+            intensity={1.0}
+            color="#E6EFF8"
           />
 
-          {/* Golden Warm Castle Rim Light */}
+          {/* Warm Antique Gold Rim Light */}
           <directionalLight
-            position={[-8, 6, -5]}
+            position={[-9, 7, -6]}
             intensity={0.65}
-            color="#C6A15B"
+            color="#D6B56D"
           />
 
           {/* 3D Elements */}
           <HogwartsCastle activeChapter={activeChapter} />
           <FloatingCandles />
+          <FloatingBooks />
           <GoldenSnitch interactive={true} />
           <MagicalParticles activeChapter={activeChapter} />
           <CameraController activeChapter={activeChapter} />

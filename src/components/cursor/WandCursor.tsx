@@ -83,7 +83,7 @@ export function WandCursor({ spellMode, footprintsActive }: WandCursorProps) {
           background:
             spellMode === "Patronum"
               ? "radial-gradient(circle, rgba(56, 189, 248, 0.22) 0%, rgba(56, 189, 248, 0.05) 45%, transparent 70%)"
-              : "radial-gradient(circle, rgba(198, 161, 91, 0.18) 0%, rgba(198, 161, 91, 0.04) 40%, transparent 70%)",
+              : "radial-gradient(circle, rgba(214, 181, 109, 0.20) 0%, rgba(214, 181, 109, 0.05) 40%, transparent 70%)",
         }}
       />
 
@@ -100,11 +100,11 @@ export function WandCursor({ spellMode, footprintsActive }: WandCursorProps) {
           background:
             spellMode === "Patronum"
               ? "#E0F2FE"
-              : "#FFF1CC",
+              : "#F4EBDD",
           boxShadow:
             spellMode === "Patronum"
               ? "0 0 15px #38BDF8, 0 0 30px #0284C7"
-              : "0 0 15px #C6A15B, 0 0 25px #E8D5A3",
+              : "0 0 15px #D6B56D, 0 0 25px #F0DFB6",
         }}
       />
 

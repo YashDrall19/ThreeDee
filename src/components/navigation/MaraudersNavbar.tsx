@@ -125,7 +125,7 @@ export function MaraudersNavbar({
               <span className="font-serif text-sm tracking-wider font-bold text-gold-gradient block leading-none">
                 YASH DRALL
               </span>
-              <span className="text-[10px] tracking-widest text-hogwarts-parchment/60 uppercase block">
+              <span className="text-[10px] tracking-widest text-hogwarts-ivory/80 uppercase block font-medium">
                 Chapter {activeChapter} of 8
               </span>
             </div>
@@ -141,11 +141,11 @@ export function MaraudersNavbar({
                   onClick={() => handleNavClick(item.num)}
                   className={`relative px-3 py-1.5 rounded-full text-xs font-serif tracking-wider uppercase transition-all duration-200 ${
                     isActive
-                      ? "text-hogwarts-gold font-bold bg-hogwarts-gold/15 border border-hogwarts-gold/40 shadow-magical"
-                      : "text-hogwarts-parchment/70 hover:text-hogwarts-gold hover:bg-hogwarts-gold/5"
+                      ? "text-hogwarts-gold font-bold bg-hogwarts-gold/20 border border-hogwarts-gold/60 shadow-magical"
+                      : "text-hogwarts-ivory hover:text-hogwarts-gold hover:bg-hogwarts-gold/10 font-medium"
                   }`}
                 >
-                  <span className="mr-1 text-[10px] opacity-60">0{item.num}.</span>
+                  <span className="mr-1 text-[10px] opacity-75">0{item.num}.</span>
                   {item.label}
                   {isActive && (
                     <motion.div

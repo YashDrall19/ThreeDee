@@ -45,7 +45,7 @@ export function AudioControlFloating() {
               <Music className="w-3.5 h-3.5" />
               <span>Orchestral Theme</span>
             </span>
-            <span className="text-[10px] font-mono text-hogwarts-parchment/70 uppercase">
+            <span className="text-[10px] font-mono text-hogwarts-ivory uppercase font-bold">
               {source === "file" ? "MP3 File" : "Celestial Synth"}
             </span>
           </div>

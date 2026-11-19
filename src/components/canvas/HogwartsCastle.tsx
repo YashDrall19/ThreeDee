@@ -59,7 +59,7 @@ export function HogwartsCastle({ activeChapter }: HogwartsCastleProps) {
       case 7:
         return new THREE.Color("#A78BFA"); // Deathly hallows silver/purple
       default:
-        return new THREE.Color("#FACC15"); // Golden warm candlelight
+        return new THREE.Color("#F59E0B"); // Warm natural candlelight
     }
   }, [activeChapter]);
 
@@ -103,8 +103,8 @@ export function HogwartsCastle({ activeChapter }: HogwartsCastleProps) {
               <planeGeometry args={[1.1, 2.6]} />
               <meshStandardMaterial
                 ref={idx === 0 ? windowMaterialRef : undefined}
-                color="#FACC15"
-                emissive="#FACC15"
+                color="#F59E0B"
+                emissive="#F59E0B"
                 emissiveIntensity={1.8}
                 roughness={0.2}
               />
@@ -112,7 +112,7 @@ export function HogwartsCastle({ activeChapter }: HogwartsCastleProps) {
             {/* Window gothic arch cap */}
             <mesh position={[0, 1.3, 0]}>
               <circleGeometry args={[0.55, 16]} />
-              <meshStandardMaterial color="#FACC15" emissive="#FACC15" emissiveIntensity={1.8} />
+              <meshStandardMaterial color="#F59E0B" emissive="#F59E0B" emissiveIntensity={1.8} />
             </mesh>
           </group>
         ))}
@@ -142,7 +142,7 @@ export function HogwartsCastle({ activeChapter }: HogwartsCastleProps) {
         {/* Glowing Observation Window */}
         <mesh position={[0, 9.5, 1.85]}>
           <planeGeometry args={[1.2, 2.2]} />
-          <meshStandardMaterial color="#FACC15" emissive="#FACC15" emissiveIntensity={2.5} />
+          <meshStandardMaterial color="#F59E0B" emissive="#F59E0B" emissiveIntensity={2.0} />
         </mesh>
       </group>
 
@@ -163,7 +163,7 @@ export function HogwartsCastle({ activeChapter }: HogwartsCastleProps) {
         {/* Windows */}
         <mesh position={[0, 8.2, 1.62]}>
           <planeGeometry args={[0.9, 1.8]} />
-          <meshStandardMaterial color="#FACC15" emissive="#FACC15" emissiveIntensity={2.2} />
+          <meshStandardMaterial color="#F59E0B" emissive="#F59E0B" emissiveIntensity={1.9} />
         </mesh>
       </group>
 

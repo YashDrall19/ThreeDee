@@ -18,6 +18,7 @@ import { Chapter5OrderOfThePhoenix } from "@/components/chapters/Chapter5OrderOf
 import { Chapter6HalfBloodPrince } from "@/components/chapters/Chapter6HalfBloodPrince";
 import { Chapter7DeathlyHallowsPart1 } from "@/components/chapters/Chapter7DeathlyHallowsPart1";
 import { Chapter8DeathlyHallowsPart2 } from "@/components/chapters/Chapter8DeathlyHallowsPart2";
+import { CinematicBackdrop } from "@/components/canvas/CinematicBackdrop";
 
 // Dynamically import 3D Canvas with ssr: false for flawless WebGL mounting
 const HogwartsCanvas = dynamic(
@@ -98,6 +99,9 @@ export default function Home() {
       {introActive && (
         <HogwartsIntro onEnter={() => setIntroActive(false)} />
       )}
+
+      {/* Cinematic Environmental Image Backdrop */}
+      <CinematicBackdrop activeChapter={activeChapter} />
 
       {/* Interactive 3D WebGL Canvas Layer */}
       <HogwartsCanvas activeChapter={activeChapter} />

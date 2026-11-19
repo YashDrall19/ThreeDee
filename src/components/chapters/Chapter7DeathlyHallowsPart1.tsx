@@ -32,7 +32,7 @@ export function Chapter7DeathlyHallowsPart1() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
-        className="mb-4 flex items-center gap-2 px-4 py-1.5 rounded-full border border-purple-400/40 bg-hogwarts-dark/70 backdrop-blur-md text-xs font-serif tracking-[0.25em] uppercase text-purple-300 shadow-[0_0_20px_rgba(168,85,247,0.25)]"
+        className="mb-4 flex items-center gap-2 px-4 py-1.5 rounded-full border border-purple-400/50 bg-hogwarts-charcoal/85 backdrop-blur-md text-xs font-serif tracking-[0.25em] uppercase text-purple-300 shadow-[0_0_20px_rgba(168,85,247,0.25)]"
       >
         <Compass className="w-3.5 h-3.5 text-purple-300" />
         <span>Chapter VII • {chapter.movieTitle}</span>
@@ -45,17 +45,17 @@ export function Chapter7DeathlyHallowsPart1() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.9 }}
-        className="text-center font-decorative text-3xl sm:text-5xl md:text-6xl font-black text-silver-gradient tracking-wide mb-3"
+        className="text-center font-decorative text-3xl sm:text-5xl md:text-6xl font-black text-silver-gradient tracking-wide mb-3 drop-shadow-[0_10px_25px_rgba(0,0,0,0.8)]"
       >
         THE WANDERING PATH & MILESTONES
       </motion.h2>
 
       <motion.p
         initial={{ opacity: 0 }}
-        whileInView={{ opacity: 0.8 }}
+        whileInView={{ opacity: 0.9 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
-        className="text-center font-serif text-sm sm:text-base text-hogwarts-parchment/80 italic max-w-xl mb-16"
+        className="text-center font-serif text-sm sm:text-base text-hogwarts-parchment italic max-w-xl mb-16 text-cinematic-shadow"
       >
         &ldquo;{chapter.quote}&rdquo;
       </motion.p>
@@ -63,7 +63,7 @@ export function Chapter7DeathlyHallowsPart1() {
       {/* Interactive Luminous Timeline */}
       <div className="relative w-full">
         {/* Central Glowing Elder Wand Light Beam */}
-        <div className="absolute left-4 sm:left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-purple-500/10 via-purple-400/50 to-hogwarts-gold/30 -translate-x-1/2 shadow-[0_0_12px_rgba(168,85,247,0.5)]" />
+        <div className="absolute left-4 sm:left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-purple-500/20 via-purple-400/60 to-hogwarts-gold/40 -translate-x-1/2 shadow-[0_0_15px_rgba(168,85,247,0.6)]" />
 
         <div className="space-y-12">
           {TIMELINE_MILESTONES.map((item, idx) => {
@@ -80,7 +80,7 @@ export function Chapter7DeathlyHallowsPart1() {
                 }`}
               >
                 {/* Center Node / Relic Seal */}
-                <div className="absolute left-4 sm:left-1/2 -translate-x-1/2 w-9 h-9 rounded-full border-2 border-purple-400 bg-hogwarts-dark flex items-center justify-center text-purple-300 shadow-[0_0_15px_rgba(168,85,247,0.4)] z-20">
+                <div className="absolute left-4 sm:left-1/2 -translate-x-1/2 w-9 h-9 rounded-full border-2 border-purple-400 bg-hogwarts-charcoal flex items-center justify-center text-purple-300 shadow-[0_0_18px_rgba(168,85,247,0.5)] z-20">
                   {getIcon(item.icon)}
                 </div>
 
@@ -90,9 +90,9 @@ export function Chapter7DeathlyHallowsPart1() {
                     isEven ? "sm:pr-6" : "sm:pl-6"
                   }`}
                 >
-                  <div className="parchment-glass rounded-2xl p-6 border border-purple-400/30 hover:border-purple-400/60 transition-all shadow-magical group">
+                  <div className="parchment-glass rounded-2xl p-6 border border-purple-400/35 hover:border-purple-400/70 transition-all shadow-magical group">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-mono text-purple-300 px-2.5 py-0.5 rounded-full border border-purple-400/30 bg-purple-950/40 font-bold">
+                      <span className="text-xs font-mono text-purple-200 px-2.5 py-0.5 rounded-full border border-purple-400/40 bg-purple-950/60 font-bold">
                         {item.year}
                       </span>
                       <span className="text-xs font-serif text-hogwarts-gold font-bold">
@@ -100,15 +100,15 @@ export function Chapter7DeathlyHallowsPart1() {
                       </span>
                     </div>
 
-                    <h3 className="font-decorative text-lg sm:text-xl font-bold text-hogwarts-parchment group-hover:text-gold-gradient transition-colors mb-1">
+                    <h3 className="font-decorative text-lg sm:text-xl font-bold text-hogwarts-ivory group-hover:text-gold-gradient transition-colors mb-1 text-cinematic-shadow">
                       {item.title}
                     </h3>
 
-                    <p className="font-serif text-xs sm:text-sm text-purple-200/90 italic mb-3">
+                    <p className="font-serif text-xs sm:text-sm text-purple-200 font-medium italic mb-3">
                       {item.institution}
                     </p>
 
-                    <p className="text-xs sm:text-sm text-hogwarts-parchment/85 leading-relaxed font-serif">
+                    <p className="text-xs sm:text-sm text-hogwarts-ivory leading-relaxed font-serif text-cinematic-shadow">
                       {item.description}
                     </p>
                   </div>
@@ -120,7 +120,7 @@ export function Chapter7DeathlyHallowsPart1() {
       </div>
 
       {/* Runic divider at bottom */}
-      <div className="mt-16 rune-divider text-purple-400/50 text-sm font-serif">
+      <div className="mt-16 rune-divider text-purple-400/60 text-sm font-serif">
         <span>ᛟ</span>
         <span>•</span>
         <span>FOOTSTEPS IN TIME</span>
