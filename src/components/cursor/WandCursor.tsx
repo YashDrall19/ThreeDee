@@ -131,7 +131,7 @@ export function WandCursor({ spellMode, footprintsActive }: WandCursorProps) {
         footprints.map((fp) => (
           <div
             key={fp.id}
-            className="fixed pointer-events-none z-20 animate-footprint -translate-x-1/2 -translate-y-1/2"
+            className="fixed pointer-events-none z-20 animate-footprint"
             style={{
               left: `${fp.x}px`,
               top: `${fp.y}px`,
