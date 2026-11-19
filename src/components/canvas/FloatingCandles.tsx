@@ -23,9 +23,10 @@ export function FloatingCandles() {
   const pointLight3Ref = useRef<THREE.PointLight>(null);
 
   // Generate varied, realistic candle distributions inspired by the Great Hall reference image
+  // Reduced to 14 strategically positioned candles hovering overhead and along outer flanks
   const candles: CandleInstance[] = useMemo(() => {
     const list: CandleInstance[] = [];
-    const count = 42;
+    const count = 14;
     let seed = 12345;
     const rnd = () => {
       seed = (seed * 9301 + 49297) % 233280;
@@ -33,15 +34,27 @@ export function FloatingCandles() {
     };
 
     for (let i = 0; i < count; i++) {
-      // Natural distribution: corridor depth and height layers
-      const baseX = (rnd() - 0.5) * 28;
-      const baseY = rnd() * 9 - 1.5;
-      const baseZ = (rnd() - 0.5) * 22 - 3;
-      const height = 0.9 + rnd() * 1.3; // Variations from short melted to tall majestic
+      // Flank-and-overhead distribution to keep main reading space clear and elegant
+      let baseX: number;
+      if (i % 3 === 0) {
+        // Left flank
+        baseX = -6 - rnd() * 6;
+      } else if (i % 3 === 1) {
+        // Right flank
+        baseX = 6 + rnd() * 6;
+      } else {
+        // Deep background center
+        baseX = (rnd() - 0.5) * 8;
+      }
+
+      // Elevated overhead ceiling placement (2.2 to 6.2 in 3D space)
+      const baseY = 2.2 + rnd() * 4.0;
+      const baseZ = -2 - rnd() * 10;
+      const height = 0.9 + rnd() * 1.1; // Variations from short melted to tall majestic
       const radius = 0.08 + rnd() * 0.04;
-      const speed = 0.5 + rnd() * 0.7; // Gentle, majestic floating speeds
+      const speed = 0.45 + rnd() * 0.55; // Gentle, majestic floating speeds
       const phase = rnd() * Math.PI * 2;
-      const swaySpeed = 0.3 + rnd() * 0.5;
+      const swaySpeed = 0.3 + rnd() * 0.4;
       const flameFlickerOffset = rnd() * 10;
 
       list.push({
@@ -227,7 +240,7 @@ export function FloatingCandles() {
         ref={pointLight1Ref}
         position={[-6, 4, 1]}
         color="#F59E0B"
-        intensity={1.8}
+        intensity={1.2}
         distance={18}
         decay={2}
       />
@@ -235,7 +248,7 @@ export function FloatingCandles() {
         ref={pointLight2Ref}
         position={[7, 3, -4]}
         color="#F59E0B"
-        intensity={1.7}
+        intensity={1.1}
         distance={18}
         decay={2}
       />
@@ -243,7 +256,7 @@ export function FloatingCandles() {
         ref={pointLight3Ref}
         position={[0, 5, 2]}
         color="#FBBF24"
-        intensity={1.9}
+        intensity={1.3}
         distance={22}
         decay={2}
       />

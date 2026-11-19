@@ -5,7 +5,6 @@ import { Canvas } from "@react-three/fiber";
 import { HogwartsCastle } from "./HogwartsCastle";
 import { FloatingCandles } from "./FloatingCandles";
 import { FloatingBooks } from "./FloatingBooks";
-import { GoldenSnitch } from "./GoldenSnitch";
 import { MagicalParticles } from "./MagicalParticles";
 import { CameraController } from "./CameraController";
 
@@ -73,7 +72,6 @@ export function HogwartsCanvas({ activeChapter }: HogwartsCanvasProps) {
           <HogwartsCastle activeChapter={activeChapter} />
           <FloatingCandles />
           <FloatingBooks />
-          <GoldenSnitch interactive={true} />
           <MagicalParticles activeChapter={activeChapter} />
           <CameraController activeChapter={activeChapter} />
         </Suspense>

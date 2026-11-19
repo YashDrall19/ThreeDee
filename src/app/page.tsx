@@ -28,6 +28,14 @@ const HogwartsCanvas = dynamic(
   { ssr: false }
 );
 
+const SnitchOverlayCanvas = dynamic(
+  () =>
+    import("@/components/canvas/SnitchOverlayCanvas").then(
+      (mod) => mod.SnitchOverlayCanvas
+    ),
+  { ssr: false }
+);
+
 export default function Home() {
   const [introActive, setIntroActive] = useState<boolean>(true);
   const [activeChapter, setActiveChapter] = useState<number>(1);
@@ -150,6 +158,9 @@ export default function Home() {
         <Chapter7DeathlyHallowsPart1 />
         <Chapter8DeathlyHallowsPart2 />
       </motion.div>
+
+      {/* Foreground 3D Golden Snitch (Flies on top of cards, components & text) */}
+      {!introActive && <SnitchOverlayCanvas />}
     </main>
   );
 }

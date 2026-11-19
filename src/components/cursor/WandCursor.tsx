@@ -49,7 +49,7 @@ export function WandCursor({ spellMode, footprintsActive }: WandCursorProps) {
           isRightStepRef.current = !isRightStepRef.current;
           lastStepRef.current = { x: e.clientX, y: e.clientY, time: now };
 
-          setFootprints((prev) => [...prev.slice(-14), newStep]);
+          setFootprints((prev) => [...prev.slice(-18), newStep]);
         }
       }
     };
@@ -66,6 +66,24 @@ export function WandCursor({ spellMode, footprintsActive }: WandCursorProps) {
       window.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("mouseup", handleMouseUp);
     };
+  }, [footprintsActive]);
+
+  // Footprint lifespan timer: auto-clear footsteps after ~2.7 seconds
+  useEffect(() => {
+    if (!footprintsActive) {
+      setFootprints([]);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      const now = Date.now();
+      setFootprints((prev) => {
+        const remaining = prev.filter((fp) => now - fp.id < 2700);
+        return remaining.length === prev.length ? prev : remaining;
+      });
+    }, 100);
+
+    return () => clearInterval(interval);
   }, [footprintsActive]);
 
   if (isTouch) return null;
@@ -108,12 +126,12 @@ export function WandCursor({ spellMode, footprintsActive }: WandCursorProps) {
         }}
       />
 
-      {/* Marauder's Map Footprints */}
+      {/* Marauder's Map Footprints (Auto-clears and fades after a few seconds) */}
       {footprintsActive &&
         footprints.map((fp) => (
           <div
             key={fp.id}
-            className="fixed pointer-events-none z-20 opacity-70 transition-opacity duration-1000 -translate-x-1/2 -translate-y-1/2"
+            className="fixed pointer-events-none z-20 animate-footprint -translate-x-1/2 -translate-y-1/2"
             style={{
               left: `${fp.x}px`,
               top: `${fp.y}px`,
@@ -123,13 +141,13 @@ export function WandCursor({ spellMode, footprintsActive }: WandCursorProps) {
             <div className="flex flex-col items-center">
               {/* Footprint sole & heel */}
               <div
-                className={`w-2.5 h-4.5 rounded-t-full bg-hogwarts-gold/60 border border-hogwarts-gold/80 shadow-[0_0_8px_rgba(198,161,91,0.6)] ${
+                className={`w-2.5 rounded-t-full bg-hogwarts-gold/75 border border-hogwarts-gold shadow-[0_0_8px_rgba(214,181,109,0.7)] ${
                   fp.isRight ? "translate-x-1.5" : "-translate-x-1.5"
                 }`}
                 style={{ height: "16px" }}
               />
               <div
-                className={`w-2 h-2 rounded-full bg-hogwarts-gold/60 mt-0.5 border border-hogwarts-gold/80 ${
+                className={`w-2 h-2 rounded-full bg-hogwarts-gold/75 mt-0.5 border border-hogwarts-gold shadow-[0_0_6px_rgba(214,181,109,0.6)] ${
                   fp.isRight ? "translate-x-1.5" : "-translate-x-1.5"
                 }`}
               />
